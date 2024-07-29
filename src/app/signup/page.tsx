@@ -2,8 +2,10 @@
 import React from "react";
 import { useState } from "react";
 import Link from "next/link";
-
+import axios from "axios";
+import { useRouter } from "next/navigation";
 const SignupPage = () => {
+  const router = useRouter();
   const [signUpData, setSignupData] = useState({
     username: "",
     password: "",
@@ -18,6 +20,16 @@ const SignupPage = () => {
         [name]: value,
       };
     });
+  };
+  //When user will click on signup button [SIGNUP_HANDLER]
+  const onSignUp = async () => {
+    try {
+      const response = await axios.post("/api/users/signup", signUpData);
+      console.log("RESPONSE", response);
+      router.push("/login");
+    } catch (error) {
+      console.log("ERROR On Signup:-", error);
+    }
   };
   return (
     <div
@@ -50,7 +62,7 @@ const SignupPage = () => {
         value={signUpData.password}
         onChange={handleSignupData}
       />
-      <button>Signup</button>
+      <button onClick={onSignUp}>Signup</button>
       <Link href="/login">Go to login</Link>
     </div>
   );
